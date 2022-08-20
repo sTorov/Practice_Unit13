@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 class Program
 {
-    const string path = "Text1.txt";
+    const string path = "D:\\VisualStudio\\repos\\Practice_Unit13\\Text1.txt";
     private static Stopwatch stopwatch = new Stopwatch();
     
     static void Main(string[] args)
@@ -13,10 +13,6 @@ class Program
         var words = text.Split(simbol, StringSplitOptions.RemoveEmptyEntries);
 
         TestList(words);
-
-        Console.WriteLine();
-
-        TestLinkedList(words);
 
         Console.ReadKey();
     }
@@ -30,7 +26,7 @@ class Program
         List<string> list = words.ToList();
         int middlePoint = list.Count / 2;
 
-        stopwatch.Restart();
+        stopwatch.Start();
         list.Insert(middlePoint, "Middle");
         stopwatch.Stop();
         Console.WriteLine("Вставка элемента в середину List<T>: " + stopwatch.Elapsed.TotalMilliseconds);
@@ -44,30 +40,5 @@ class Program
         list.Insert(list.Count - 1, "End");
         stopwatch.Stop();
         Console.WriteLine("Вставка элемента в конец List<T>: " + stopwatch.Elapsed.TotalMilliseconds);
-    }
-
-    /// <summary>
-    /// Проверка скорости вставки новых элементов в коллекцию LinkedList
-    /// </summary>
-    /// <param name="words"></param>
-    static void TestLinkedList(string[] words)
-    {
-        LinkedList<string> linkedList = new LinkedList<string>(words);
-        LinkedListNode<string> node = linkedList.Find(words[words.Length / 2])!;
-
-        stopwatch.Restart();
-        linkedList.AddBefore(node, "Middle");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в середину LinkedList<T>: " + stopwatch.Elapsed.TotalMilliseconds);
-
-        stopwatch.Restart();
-        linkedList.AddFirst("Start");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в начало LinkedList<T>: " + stopwatch.Elapsed.TotalMilliseconds);
-
-        stopwatch.Restart();
-        linkedList.AddLast("End");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в конец LinkedList<T>: " + stopwatch.Elapsed.TotalMilliseconds);
     }
 }

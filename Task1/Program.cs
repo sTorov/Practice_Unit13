@@ -8,15 +8,17 @@ class Program
     
     static void Main(string[] args)
     {
-        string text = File.ReadAllText(path);
-        char[] simbol = { ' ', '\n' };
-        var words = text.Split(simbol, StringSplitOptions.RemoveEmptyEntries);
+        if(!File.Exists(path))
+        {
+            Console.WriteLine("Файл не найден!");
+            return;
+        }
 
-        TestList(words);
+        string[] text = File.ReadAllLines(path);
 
+        TestList(text);
         Console.WriteLine();
-
-        TestLinkedList(words);
+        TestLinkedList(text);
 
         Console.ReadKey();
     }
@@ -24,50 +26,58 @@ class Program
     /// <summary>
     /// Проверка скорости вставки новых элементов в коллекцию List
     /// </summary>
-    /// <param name="words"></param>
-    static void TestList(string[] words)
+    /// <param name="lines"></param>
+    static void TestList(string[] lines)
     {
-        List<string> list = words.ToList();
-        int middlePoint = list.Count / 2;
+        List<string> list = new List<string>();
+        double time = 0;
 
-        stopwatch.Restart();
-        list.Insert(middlePoint, "Middle");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в середину List<T>: " + stopwatch.Elapsed.TotalMilliseconds);
+        Console.WriteLine("Замер времени вставки в коллекцию List<T>...");
 
-        stopwatch.Restart();
-        list.Insert(0, "Start");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в начало List<T>: " + stopwatch.Elapsed.TotalMilliseconds);
+        stopwatch.Start();
 
-        stopwatch.Restart();
-        list.Insert(list.Count - 1, "End");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в конец List<T>: " + stopwatch.Elapsed.TotalMilliseconds);
+        for (int i = 0; i < 10; i++)
+        {
+            Thread.Sleep(200);
+            stopwatch.Restart();
+
+            foreach (var line in lines)
+                list.Add(line);
+
+            stopwatch.Stop();
+            time += stopwatch.Elapsed.TotalMilliseconds;
+            Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
+            list.Clear();
+        }
+        Console.WriteLine($"Среднее время вставки: {Math.Round(time / 10, 4)} мс");
     }
 
     /// <summary>
     /// Проверка скорости вставки новых элементов в коллекцию LinkedList
     /// </summary>
-    /// <param name="words"></param>
-    static void TestLinkedList(string[] words)
+    /// <param name="lines"></param>
+    static void TestLinkedList(string[] lines)
     {
-        LinkedList<string> linkedList = new LinkedList<string>(words);
-        LinkedListNode<string> node = linkedList.Find(words[words.Length / 2])!;
+        LinkedList<string> linkedList = new LinkedList<string>();
+        double time = 0;
 
-        stopwatch.Restart();
-        linkedList.AddBefore(node, "Middle");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в середину LinkedList<T>: " + stopwatch.Elapsed.TotalMilliseconds);
+        Console.WriteLine("Замер времени вставки в коллекцию LinkedList<T>...");
 
-        stopwatch.Restart();
-        linkedList.AddFirst("Start");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в начало LinkedList<T>: " + stopwatch.Elapsed.TotalMilliseconds);
+        stopwatch.Start();
 
-        stopwatch.Restart();
-        linkedList.AddLast("End");
-        stopwatch.Stop();
-        Console.WriteLine("Вставка элемента в конец LinkedList<T>: " + stopwatch.Elapsed.TotalMilliseconds);
+        for (int i = 0; i < 10; i++)
+        {
+            Thread.Sleep(200);
+            stopwatch.Restart();
+
+            foreach (var line in lines)
+                linkedList.AddLast(line);
+
+            stopwatch.Stop();
+            time += stopwatch.Elapsed.TotalMilliseconds;
+            Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
+            linkedList.Clear();
+        }
+        Console.WriteLine($"Среднее время вставки: {Math.Round(time / 10, 4)} мс");
     }
 }

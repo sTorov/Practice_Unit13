@@ -35,14 +35,13 @@ class Program
     {
         Func<string, LinkedListNode<string>>? func = default;
         LinkedListNode<string>? middleNode = default;
-        double time = 0;
         int count = 0;
         string lable = string.Empty;
 
         while(count < 3)
         {
             LinkedList<string> linkedList = new LinkedList<string>(words);
-            time = 0;
+            double time = 0;
 
             switch (count)
             {

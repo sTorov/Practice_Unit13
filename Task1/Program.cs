@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Text;
 
 class Program
 {
     const string path = "D:\\VisualStudio\\repos\\Practice_Unit13\\Text1.txt";
-    private static Stopwatch stopwatch = new Stopwatch();
+    private static Stopwatch stopwatch = new();
     
     static void Main(string[] args)
     {
+        Console.OutputEncoding = Encoding.UTF8;
+
         if(!File.Exists(path))
         {
             Console.WriteLine("Файл не найден!");
@@ -17,95 +19,65 @@ class Program
         string text = File.ReadAllText(path);
         char[] simbol = { ' ', '\n' };
         var words = text.Split(simbol, StringSplitOptions.RemoveEmptyEntries).ToList();
+        int n = 10;
 
-        TestInsertFirst(words);
-        Console.WriteLine();
-        TestInsertMiddle(words);
-        Console.WriteLine();
-        TestInsertLast(words);
+        TestInsertList(words, n);
 
         Console.ReadKey();
     }
 
     /// <summary>
-    /// Проверка скорости вставки новых элементов в начало коллекции
+    /// Проверка скорости вставки новых элементов в начало, середину и конец коллекции
     /// </summary>
     /// <param name="list"></param>
-    static void TestInsertFirst(List<string> list)
+    /// <param name="n"></param>
+    static void TestInsertList(List<string> list, int n)
     {
-        List<string> temp = list;
-        double time = 0;
-
-        Console.WriteLine("Вставка элемента в начало List<T>...");
-        stopwatch.Start();
-
-        for (int i = 0; i < 10; i++)
-        {
-            Thread.Sleep(200);
-
-            stopwatch.Restart();
-            temp.Insert(0, "Start");
-            stopwatch.Stop();
-
-            time += stopwatch.Elapsed.TotalMilliseconds;
-            Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
-        }
-
-        Console.WriteLine($"Среднее время {Math.Round(time / 10, 4)} мс");
-    }
-
-    /// <summary>
-    /// Проверка скорости вставки новых элементов в середину коллекции
-    /// </summary>
-    /// <param name="list"></param>
-    static void TestInsertMiddle(List<string> list)
-    {
-        List<string> temp = list;
+        string lable = string.Empty;
+        int count = 0;
+        int index = 0;
         int middlePoint = list.Count / 2;
-        double time = 0;
 
-        Console.WriteLine("Вставка элемента в середину List<T>...");
-        stopwatch.Start();
-
-        for (int i = 0; i < 10; i++)
+        while (count < 3)
         {
-            Thread.Sleep(200);
+            List<string> temp = list;
+            double time = 0;
 
-            stopwatch.Restart();
-            temp.Insert(middlePoint, "Middle");
-            stopwatch.Stop();
+            switch (count)
+            {
+                case 0:
+                    index = 0;
+                    lable = "Вставка элемента в начало List<T>...";
+                    break;
+                case 1:
+                    index = middlePoint;
+                    lable = "Вставка элемента в середину List<T>...";
+                    break;
+                case 2:
+                    index = list.Count - 1;
+                    lable = "Вставка элемента в конец List<T>...";
+                    break;
+            }
 
-            time += stopwatch.Elapsed.TotalMilliseconds;
-            Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
-        }
+            Console.WriteLine(lable);
+            stopwatch.Start();
 
-        Console.WriteLine($"Среднее время {Math.Round(time / 10, 4)} мс");
-    }
+            for (int i = 0; i < n; i++)
+            {
+                Thread.Sleep(200);
 
-    /// <summary>
-    /// Проверка скорости вставки новых элементов в конец коллекции
-    /// </summary>
-    /// <param name="list"></param>
-    static void TestInsertLast(List<string> list)
-    {
-        List<string> temp = list;
-        double time = 0;
+                stopwatch.Restart();
+                temp.Insert(index, $"{i}");
+                stopwatch.Stop();
 
-        Console.WriteLine("Вставка элемента в конец List<T>...");
-        stopwatch.Start();
+                time += stopwatch.Elapsed.TotalMilliseconds;
+                Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
+            }
 
-        for (int i = 0; i < 10; i++)
-        {
-            Thread.Sleep(200);
+            Console.WriteLine($"Среднее время {Math.Round(time / n, 4)} мс");
+            Console.WriteLine();
 
-            stopwatch.Restart();
-            temp.Insert(temp.Count - 1, "Start");
-            stopwatch.Stop();
-
-            time += stopwatch.Elapsed.TotalMilliseconds;
-            Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
-        }
-
-        Console.WriteLine($"Среднее время {Math.Round(time / 10, 4)} мс");
+            count++;
+        }        
     }
 }

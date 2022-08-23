@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Text;
 
 class Program
 {
     const string path = "Text1.txt";
-    private static Stopwatch stopwatch = new Stopwatch();
+    private static Stopwatch stopwatch = new();
     
     static void Main(string[] args)
     {
+        Console.OutputEncoding = Encoding.UTF8;
+
         if(!File.Exists(path))
         {
             Console.WriteLine("Файл не найден!");
@@ -15,10 +17,11 @@ class Program
         }
 
         string[] text = File.ReadAllLines(path);
+        int n = 10;
 
-        TestList(text);
+        TestList(text, n);
         Console.WriteLine();
-        TestLinkedList(text);
+        TestLinkedList(text, n);
 
         Console.ReadKey();
     }
@@ -27,16 +30,17 @@ class Program
     /// Проверка скорости вставки новых элементов в коллекцию List
     /// </summary>
     /// <param name="lines"></param>
-    static void TestList(string[] lines)
+    /// <param name="n"></param>
+    static void TestList(string[] lines, int n)
     {
-        List<string> list = new List<string>();
+        List<string> list = new();
         double time = 0;
 
         Console.WriteLine("Замер времени вставки в коллекцию List<T>...");
 
         stopwatch.Start();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < n; i++)
         {
             Thread.Sleep(200);
             stopwatch.Restart();
@@ -45,27 +49,29 @@ class Program
                 list.Add(line);
 
             stopwatch.Stop();
+
             time += stopwatch.Elapsed.TotalMilliseconds;
             Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
             list.Clear();
         }
-        Console.WriteLine($"Среднее время вставки: {Math.Round(time / 10, 4)} мс");
+        Console.WriteLine($"Среднее время вставки: {Math.Round(time / n, 4)} мс");
     }
 
     /// <summary>
     /// Проверка скорости вставки новых элементов в коллекцию LinkedList
     /// </summary>
     /// <param name="lines"></param>
-    static void TestLinkedList(string[] lines)
+    /// <param name="n"></param>
+    static void TestLinkedList(string[] lines, int n)
     {
-        LinkedList<string> linkedList = new LinkedList<string>();
+        LinkedList<string> linkedList = new();
         double time = 0;
 
         Console.WriteLine("Замер времени вставки в коллекцию LinkedList<T>...");
 
         stopwatch.Start();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < n; i++)
         {
             Thread.Sleep(200);
             stopwatch.Restart();
@@ -74,10 +80,11 @@ class Program
                 linkedList.AddLast(line);
 
             stopwatch.Stop();
+
             time += stopwatch.Elapsed.TotalMilliseconds;
             Console.WriteLine(stopwatch.Elapsed.TotalMilliseconds + " мс");
             linkedList.Clear();
         }
-        Console.WriteLine($"Среднее время вставки: {Math.Round(time / 10, 4)} мс");
+        Console.WriteLine($"Среднее время вставки: {Math.Round(time / n, 4)} мс");
     }
 }

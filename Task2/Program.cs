@@ -19,7 +19,7 @@ class Program
 
         char[] ch = { ' ', '\n' };
         string[] words = noPunctuationText.Split(ch, StringSplitOptions.RemoveEmptyEntries);
-        Dictionary<string, int> dictionary = new Dictionary<string, int>();
+        Dictionary<string, int> dictionary = new();
 
         for(int i = 0; i < words.Length; i++)
         {
@@ -29,17 +29,18 @@ class Program
                 dictionary.Add(words[i], 1);
         }
 
-        var sortedDictionary = dictionary.OrderByDescending(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+        var sortedDictionary = dictionary.OrderByDescending(x => x.Value);
 
-        Console.WriteLine("{0} | {1, 22}", "Слово", "Количество повторений");
-        Console.WriteLine("================");
+        Console.WriteLine("10 самых часто используемых слов в тексте\n");
+        Console.WriteLine("{0, -6} | {1, -11}", "Слово", "Повторений");
+        Console.WriteLine("===================");
 
         int j = 0;
         foreach (var pair in sortedDictionary)
         {
             if (j == 10)
                 break;
-            Console.WriteLine($"{pair.Key, 5} | {pair.Value, 5}");
+            Console.WriteLine($"{pair.Key, -6} | {pair.Value, -11}");
             j++;
         }    
 
